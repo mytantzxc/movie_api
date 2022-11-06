@@ -36,6 +36,3 @@ if __name__ == "__main__":
         db.drop_all()
 
 
-    # hyeta = {"Bebras": list(dict(id=bebra.id, name=bebra.name) for bebra in bebra_container.bebra_list)}
-    # print(hyeta)
-

@@ -18,5 +18,10 @@ class Genre(db.Model):
         db.session.commit()
 
     @classmethod
+    def get_all(cls) -> tuple:
+        return Genre.query.all()
+
+
+    @classmethod
     def exists(cls, genre_name):
         return Genre.query.filter(Genre.name == genre_name).first()

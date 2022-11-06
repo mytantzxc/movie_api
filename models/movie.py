@@ -1,6 +1,7 @@
 from datetime import datetime
+
 from . import db
-from .movie_genre import MovieGenre
+from .movie_genre import movie_genre
 from sqlalchemy.dialects.postgresql import VARCHAR, INTEGER, SMALLINT, TIMESTAMP
 
 
@@ -12,24 +13,32 @@ class Movie(db.Model):
     year = db.Column(INTEGER, nullable=False)
     rate = db.Column(SMALLINT, nullable=False)
     uploaded = db.Column(TIMESTAMP, nullable=False, default=datetime.utcnow())
-    genres = db.relationship('genre', secondary=MovieGenre, backref=db.backref('movies', lazy=True))
+    genres = db.relationship('Genre', secondary=movie_genre, backref=db.backref('movies', lazy=True))
 
-    def __init__(self, title, year, rate, uploaded, genre):
+    def __init__(self, title, year, rate, uploaded):
         self.title = title,
         self.year = year
         self.rate = rate,
         self.uploaded = uploaded,
-        self.genre = genre
 
     def __repr__(self):
-        return f"Movie {self.title},{self.year} {self.rate}"
+        return f"Movie {self.title} {self.year} {self.rate}"
 
     def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def add_genre(self, genre):
+        self.genres.append(genre)
         db.session.add(self)
         db.session.commit()
 
     @classmethod
     def get_all(cls) -> tuple:
         return db.session.query(Movie)
+
+    @classmethod
+    def exists(cls, title):
+        return Movie.query.filter(Movie.title == title).first()
 
 
