@@ -1,5 +1,7 @@
 from flask_restx import fields, Namespace, Resource
 from models.movie import Movie
+from models.genre import Genre
+from models.movie_genre import MovieGenre
 from flask import request
 
 movie_namespace = Namespace('movies', description="Bebra movies")
@@ -8,7 +10,9 @@ movie_model = movie_namespace.model(
     'Movie',
     {
         'title': fields.String,
-        'genre': fields.String
+        'year': fields.Integer,
+        'rate': fields.Integer,
+        'genres': fields.List(fields.String)
     },
 )
 
@@ -28,6 +32,7 @@ class PostMovie(Resource):
     @movie_namespace.expect(movie_model)
     def post():
         args = request.json
+        print(args)
         movie = Movie(
             args.get('title'),
             args.get('genre')

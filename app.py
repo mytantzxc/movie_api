@@ -4,6 +4,8 @@ from flask_restx import Api
 from models import db
 from flask_migrate import Migrate
 from controllers.movie import movie_namespace
+from controllers.genre import genre_namespace
+
 
 def create_app():
     app = Flask(__name__)
@@ -23,6 +25,7 @@ migrate = init_migrate(app=app)
 api = Api(app)
 
 api.add_namespace(movie_namespace)
+api.add_namespace(genre_namespace)
 
 if __name__ == "__main__":
 
